@@ -11,6 +11,8 @@
     "format:check": "pnpm prettier ./src --check"
   },
   "dependencies": {
+    "@privy-io/react-auth": "^1.94.2",
+    "@privy-io/wagmi": "^0.2.12",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.2",
@@ -21,6 +23,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@t3-oss/env-nextjs": "^0.11.1",
+    "@tanstack/react-query": "^5.60.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "geist": "^1.3.1",
@@ -34,6 +37,7 @@
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "viem": "^2.21.45",
+    "wagmi": "^2.12.33",
     "zod": "^3.23.8"
   },
   "devDependencies": {

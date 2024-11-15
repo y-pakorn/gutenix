@@ -6,8 +6,10 @@ import { Sora } from "next/font/google"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { SidebarProvider } from "@/components/ui/sidebar"
+import { Toaster } from "@/components/ui/sonner"
 import { AppSidebar } from "@/components/app-sidebar"
 import { ThemeProvider } from "@/components/theme-provider"
+import { WalletProvider } from "@/components/wallet-provider"
 
 const font = Sora({
   subsets: ["latin"],
@@ -77,10 +79,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider>
-            <AppSidebar />
-            {children}
-          </SidebarProvider>
+          <WalletProvider>
+            <SidebarProvider>
+              <AppSidebar />
+              {children}
+            </SidebarProvider>
+          </WalletProvider>
+          <Toaster closeButton />
         </ThemeProvider>
       </body>
     </html>
