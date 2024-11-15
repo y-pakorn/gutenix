@@ -1,19 +1,11 @@
 import { readdir, readFile } from "fs/promises"
-import Link from "next/link"
 import _ from "lodash"
 
 import { Course } from "@/types/course"
 import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
-import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
-import { Icons } from "@/components/icons"
-import { ModeToggle } from "@/components/mode-toggle"
-
-import { CourseFilterSidebar } from "./course-filter"
+import { CourseFilterSidebar } from "@/components/course-filter"
 
 export default async function Home({
   searchParams: __,
