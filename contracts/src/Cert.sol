@@ -4,14 +4,15 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
+
+enum Status {
+    Active,
+    Expired,
+    Revoked
+}
 
 interface ICertificateValidator {
-    enum Status {
-        Active,
-        Expired,
-        Revoked
-    }
-
     function checkCertificateStatus(
         address recipient,
         string memory certificateId
@@ -22,11 +23,6 @@ interface ICertificateValidator {
 }
 
 interface ICertificateMetadata {
-    enum Status {
-        Active,
-        Expired,
-        Revoked
-    }
     enum Level {
         Beginner,
         Intermediate,
@@ -55,6 +51,7 @@ contract CertificateNFT is
     ICertificateValidator
 {
     using ECDSA for bytes32;
+    using MessageHashUtils for bytes32;
 
     struct Certificate {
         string certificateId;
@@ -180,5 +177,9 @@ contract CertificateNFT is
         }
 
         return (true, currentStatus, cert.expiryTimestamp);
+    }
+
+    function _exists(uint256 tokenId) internal view returns (bool) {
+        return ownerOf(tokenId) != address(0);
     }
 }
