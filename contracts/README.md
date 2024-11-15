@@ -67,3 +67,5 @@ $ cast --help
 
 
 forge script --chain sepolia --rpc-url https://1rpc.io/sepolia  script/deploy.s.sol:MyScript --broadcast --verify -vvvv
+
+forge script --rpc-url https://1rpc.io/sepolia  script/deploy.s.sol:MyScript --broadcast --verify
