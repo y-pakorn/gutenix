@@ -1,13 +1,17 @@
 import "@/styles/globals.css"
 
 import type { Metadata, Viewport } from "next"
-import { Inter } from "next/font/google"
+import { Sora } from "next/font/google"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 import { ThemeProvider } from "@/components/theme-provider"
 
-const inter = Inter({ subsets: ["latin"] })
+const font = Sora({
+  subsets: ["latin"],
+})
 
 interface RootLayoutProps {
   children: React.ReactNode
@@ -66,19 +70,17 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body
-        className={cn(
-          "min-h-screen bg-background antialiased",
-          inter.className
-        )}
-      >
+      <body className={cn(`min-h-screen antialiased`, font.className)}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <SidebarProvider>
+            <AppSidebar />
+            {children}
+          </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>
