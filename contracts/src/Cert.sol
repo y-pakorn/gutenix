@@ -77,14 +77,21 @@ contract CertificateNFT is
         string memory certificateId,
         Level level,
         uint256 validityPeriod,
+        uint256 price,
         bytes memory signature
-    ) external {
+    ) external payable {
+        require(msg.value >= price, "Invalid price");
         uint256 tokenId = generateTokenId(recipient, certificateId);
         require(!_exists(tokenId), "Certificate already exists");
-        _mint(recipient, tokenId);
 
         bytes32 messageHash = keccak256(
-            abi.encodePacked(recipient, certificateId, level, validityPeriod)
+            abi.encodePacked(
+                recipient,
+                certificateId,
+                level,
+                validityPeriod,
+                price
+            )
         );
         bytes32 signedHash = messageHash.toEthSignedMessageHash();
         require(signedHash.recover(signature) == owner(), "Invalid signature");
@@ -99,7 +106,7 @@ contract CertificateNFT is
             level: level
         });
 
-        // _mint(recipient, tokenId);
+        _mint(recipient, tokenId);
     }
 
     function updateStatus(

@@ -14,6 +14,7 @@ contract CertificateNFTTest is Test {
     address public owner;
     address public recipient;
     uint256 public ownerPrivateKey;
+    uint256 public price = 0;
 
     event Transfer(
         address indexed from,
@@ -37,7 +38,13 @@ contract CertificateNFTTest is Test {
         uint256 validityPeriod = 365 days;
 
         bytes32 messageHash = keccak256(
-            abi.encodePacked(recipient, certificateId, level, validityPeriod)
+            abi.encodePacked(
+                recipient,
+                certificateId,
+                level,
+                validityPeriod,
+                price
+            )
         );
         bytes32 signedHash = messageHash.toEthSignedMessageHash();
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, signedHash);
@@ -56,6 +63,7 @@ contract CertificateNFTTest is Test {
             certificateId,
             level,
             validityPeriod,
+            price,
             signature
         );
 
@@ -68,7 +76,13 @@ contract CertificateNFTTest is Test {
         uint256 validityPeriod = 365 days;
 
         bytes32 messageHash = keccak256(
-            abi.encodePacked(recipient, certificateId, level, validityPeriod)
+            abi.encodePacked(
+                recipient,
+                certificateId,
+                level,
+                validityPeriod,
+                price
+            )
         );
         bytes32 signedHash = messageHash.toEthSignedMessageHash();
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, signedHash);
@@ -80,6 +94,7 @@ contract CertificateNFTTest is Test {
             certificateId,
             level,
             validityPeriod,
+            price,
             signature
         );
 
@@ -90,6 +105,7 @@ contract CertificateNFTTest is Test {
             certificateId,
             level,
             validityPeriod,
+            price,
             signature
         );
     }
@@ -101,7 +117,13 @@ contract CertificateNFTTest is Test {
 
         uint256 wrongPrivateKey = 0xBAD;
         bytes32 messageHash = keccak256(
-            abi.encodePacked(recipient, certificateId, level, validityPeriod)
+            abi.encodePacked(
+                recipient,
+                certificateId,
+                level,
+                validityPeriod,
+                price
+            )
         );
         bytes32 signedHash = messageHash.toEthSignedMessageHash();
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(wrongPrivateKey, signedHash);
@@ -113,6 +135,7 @@ contract CertificateNFTTest is Test {
             certificateId,
             level,
             validityPeriod,
+            price,
             wrongSignature
         );
     }
@@ -124,7 +147,13 @@ contract CertificateNFTTest is Test {
         uint256 validityPeriod = 365 days;
 
         bytes32 messageHash = keccak256(
-            abi.encodePacked(recipient, certificateId, level, validityPeriod)
+            abi.encodePacked(
+                recipient,
+                certificateId,
+                level,
+                validityPeriod,
+                price
+            )
         );
         bytes32 signedHash = messageHash.toEthSignedMessageHash();
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, signedHash);
@@ -134,11 +163,13 @@ contract CertificateNFTTest is Test {
             recipient,
             certificateId
         );
+        // send eth to mint
         certificateNFT.mint(
             recipient,
             certificateId,
             level,
             validityPeriod,
+            price,
             signature
         );
 
@@ -157,7 +188,13 @@ contract CertificateNFTTest is Test {
         uint256 validityPeriod = 365 days;
 
         bytes32 messageHash = keccak256(
-            abi.encodePacked(recipient, certificateId, level, validityPeriod)
+            abi.encodePacked(
+                recipient,
+                certificateId,
+                level,
+                validityPeriod,
+                price
+            )
         );
         bytes32 signedHash = messageHash.toEthSignedMessageHash();
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, signedHash);
@@ -172,6 +209,7 @@ contract CertificateNFTTest is Test {
             certificateId,
             level,
             validityPeriod,
+            price,
             signature
         );
 
@@ -197,7 +235,13 @@ contract CertificateNFTTest is Test {
         uint256 validityPeriod = 365 days;
 
         bytes32 messageHash = keccak256(
-            abi.encodePacked(recipient, certificateId, level, validityPeriod)
+            abi.encodePacked(
+                recipient,
+                certificateId,
+                level,
+                validityPeriod,
+                price
+            )
         );
         bytes32 signedHash = messageHash.toEthSignedMessageHash();
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, signedHash);
@@ -209,6 +253,7 @@ contract CertificateNFTTest is Test {
             certificateId,
             level,
             validityPeriod,
+            price,
             signature
         );
 
@@ -227,5 +272,88 @@ contract CertificateNFTTest is Test {
         assertFalse(exists);
         assertEq(uint(status), uint(Status.Expired));
         assertEq(expiry, 0);
+    }
+
+    function testPricedCertificate() public {
+        string memory certificateId = "CERT-001";
+        ICertificateMetadata.Level level = ICertificateMetadata.Level.Advanced;
+        uint256 validityPeriod = 365 days;
+        price = 1 ether;
+
+        bytes32 messageHash = keccak256(
+            abi.encodePacked(
+                recipient,
+                certificateId,
+                level,
+                validityPeriod,
+                price
+            )
+        );
+        bytes32 signedHash = messageHash.toEthSignedMessageHash();
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, signedHash);
+        bytes memory signature = abi.encodePacked(r, s, v);
+
+        uint256 tokenId = certificateNFT.generateTokenId(
+            recipient,
+            certificateId
+        );
+        certificateNFT.mint{value: 1 ether}(
+            recipient,
+            certificateId,
+            level,
+            validityPeriod,
+            price,
+            signature
+        );
+
+        // Check initial status
+        (, , , Status initialStatus, ) = certificateNFT.getCertificateInfo(
+            tokenId
+        );
+        assertEq(uint(initialStatus), uint(Status.Active));
+
+        // Warp time forward past validity period
+        vm.warp(block.timestamp + validityPeriod + 1);
+
+        // Check expired status
+        (, , , Status expiredStatus, ) = certificateNFT.getCertificateInfo(
+            tokenId
+        );
+        assertEq(uint(expiredStatus), uint(Status.Expired));
+    }
+
+    function testNotPaying() public {
+        string memory certificateId = "CERT-001";
+        ICertificateMetadata.Level level = ICertificateMetadata.Level.Advanced;
+        uint256 validityPeriod = 365 days;
+        price = 1 ether;
+
+        bytes32 messageHash = keccak256(
+            abi.encodePacked(
+                recipient,
+                certificateId,
+                level,
+                validityPeriod,
+                price
+            )
+        );
+        bytes32 signedHash = messageHash.toEthSignedMessageHash();
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, signedHash);
+        bytes memory signature = abi.encodePacked(r, s, v);
+
+        uint256 tokenId = certificateNFT.generateTokenId(
+            recipient,
+            certificateId
+        );
+
+        vm.expectRevert("Invalid price");
+        certificateNFT.mint{value: 0}(
+            recipient,
+            certificateId,
+            level,
+            validityPeriod,
+            price,
+            signature
+        );
     }
 }
