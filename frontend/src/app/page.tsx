@@ -97,8 +97,10 @@ export default async function Home({
                 </p>
                 <p className="text-wrap text-sm">{course.description}</p>
                 <div className="mt-1 flex items-center gap-2">
-                  {course.tags.map((tag) => (
-                    <Badge variant="secondary">{_.startCase(tag)}</Badge>
+                  {course.tags.map((tag, i) => (
+                    <Badge variant="secondary" key={i}>
+                      {_.startCase(tag)}
+                    </Badge>
                   ))}
                 </div>
               </div>
