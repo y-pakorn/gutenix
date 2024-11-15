@@ -1,0 +1,9 @@
+list key topics from the following content:
+
+<start>
+{content}
+<end>
+
+only list topic that exist in the content.
+
+the response should be a JSON list of key topics. only keyword no explanation.
