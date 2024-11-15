@@ -1,8 +1,8 @@
-import { readdir, readFile } from "fs/promises"
+import Link from "next/link"
 import _ from "lodash"
 
-import { Course } from "@/types/course"
 import { siteConfig } from "@/config/site"
+import { getAllCourses } from "@/services/course"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { CourseFilterSidebar } from "@/components/course-filter"
@@ -13,17 +13,7 @@ export default async function Home({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const searchParams = await __
-  const courses: Course[] = await readdir("../content").then((folder) => {
-    return Promise.all(
-      folder.map(async (courseId) => {
-        const json = await readFile(
-          `../content/${courseId}/metadata.json`,
-          "utf8"
-        ).then(JSON.parse)
-        return { ...json, id: courseId }
-      })
-    )
-  })
+  const courses = await getAllCourses()
 
   const categories = _.chain(courses)
     .map("category")
@@ -88,7 +78,8 @@ export default async function Home({
         />
         <div className="grid grid-cols-1 gap-4">
           {shownCourses.map((course) => (
-            <div
+            <Link
+              href={`/course/${course.id}`}
               key={course.id}
               className="flex cursor-pointer items-center gap-4 transition-transform duration-300 hover:scale-[1.02]"
             >
@@ -111,7 +102,7 @@ export default async function Home({
                   ))}
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

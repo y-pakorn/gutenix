@@ -126,6 +126,7 @@ export function AppSidebar() {
                         src={chain.icon}
                       />
                       <span>{chain.name}</span>
+                      <ChevronsUpDown className="ml-auto size-4" />
                     </SidebarMenuButton>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
