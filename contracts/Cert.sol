@@ -3,8 +3,23 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+
+interface ICertificateValidator {
+    enum Status {
+        Active,
+        Expired,
+        Revoked
+    }
+
+    function checkCertificateStatus(
+        address recipient,
+        string memory certificateId
+    )
+        external
+        view
+        returns (bool exists, Status status, uint256 expiryTimestamp);
+}
 
 interface ICertificateMetadata {
     enum Status {
@@ -33,11 +48,13 @@ interface ICertificateMetadata {
         );
 }
 
-contract CertificateNFT is ERC721, Ownable, ICertificateMetadata {
-    using Counters for Counters.Counter;
+contract CertificateNFT is
+    ERC721,
+    Ownable,
+    ICertificateMetadata,
+    ICertificateValidator
+{
     using ECDSA for bytes32;
-
-    Counters.Counter private _tokenIds;
 
     struct Certificate {
         string certificateId;
@@ -51,6 +68,13 @@ contract CertificateNFT is ERC721, Ownable, ICertificateMetadata {
 
     constructor() ERC721("Certificate", "CERT") Ownable(msg.sender) {}
 
+    function generateTokenId(
+        address recipient,
+        string memory certificateId
+    ) public pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(recipient, certificateId)));
+    }
+
     function mint(
         address recipient,
         string memory certificateId,
@@ -58,17 +82,18 @@ contract CertificateNFT is ERC721, Ownable, ICertificateMetadata {
         uint256 validityPeriod,
         bytes memory signature
     ) external {
+        uint256 tokenId = generateTokenId(recipient, certificateId);
+        require(!_exists(tokenId), "Certificate already exists");
+
         bytes32 messageHash = keccak256(
             abi.encodePacked(recipient, certificateId, level, validityPeriod)
         );
         bytes32 signedHash = messageHash.toEthSignedMessageHash();
         require(signedHash.recover(signature) == owner(), "Invalid signature");
 
-        _tokenIds.increment();
-        uint256 newTokenId = _tokenIds.current();
         uint256 expiryTimestamp = block.timestamp + validityPeriod;
 
-        _certificates[newTokenId] = Certificate({
+        _certificates[tokenId] = Certificate({
             certificateId: certificateId,
             issueTimestamp: block.timestamp,
             expiryTimestamp: expiryTimestamp,
@@ -76,7 +101,7 @@ contract CertificateNFT is ERC721, Ownable, ICertificateMetadata {
             level: level
         });
 
-        _mint(recipient, newTokenId);
+        _mint(recipient, tokenId);
     }
 
     function updateStatus(
@@ -115,7 +140,6 @@ contract CertificateNFT is ERC721, Ownable, ICertificateMetadata {
         require(_exists(tokenId), "Certificate does not exist");
         Certificate memory cert = _certificates[tokenId];
 
-        // Check expiry without modifying state
         Status currentStatus = cert.status;
         if (
             currentStatus == Status.Active &&
@@ -131,5 +155,30 @@ contract CertificateNFT is ERC721, Ownable, ICertificateMetadata {
             currentStatus,
             cert.level
         );
+    }
+    function checkCertificateStatus(
+        address recipient,
+        string memory certificateId
+    )
+        external
+        view
+        returns (bool exists, Status status, uint256 expiryTimestamp)
+    {
+        uint256 tokenId = generateTokenId(recipient, certificateId);
+
+        if (!_exists(tokenId)) {
+            return (false, Status.Expired, 0);
+        }
+
+        Certificate memory cert = _certificates[tokenId];
+        Status currentStatus = cert.status;
+        if (
+            currentStatus == Status.Active &&
+            block.timestamp > cert.expiryTimestamp
+        ) {
+            currentStatus = Status.Expired;
+        }
+
+        return (true, currentStatus, cert.expiryTimestamp);
     }
 }
