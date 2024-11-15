@@ -1,3 +1,4 @@
 *.DS_Store
 contracts/cache/*
 contracts/.env
+contracts/broadcast/*
