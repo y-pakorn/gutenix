@@ -1,0 +1,9 @@
+edit the following content according to user's request:
+
+<start>
+{content}
+<end>
+
+user request: {request}
+
+response should be the edited markdown content.
