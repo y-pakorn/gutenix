@@ -1,13 +1,13 @@
-import { readFile } from "fs/promises"
-import { useParams } from "next/navigation"
+import { getCourse, getCourseContent } from "@/services/course"
 
-import { getCourse } from "@/services/course"
+import { CourseCover } from "./course-cover"
 
 export default async function Page(p: { params: Promise<{ id: string[] }> }) {
   const id = await p.params.then((p) => p.id?.[0])
   const course = await getCourse(id)
+  const content = await getCourseContent(id)
 
-  if (!course)
+  if (!course || !content)
     return (
       <main className="flex h-screen w-full flex-col items-center justify-center px-8 py-8">
         <h1 className="text-4xl font-bold">Course Not Found</h1>
@@ -17,5 +17,9 @@ export default async function Page(p: { params: Promise<{ id: string[] }> }) {
       </main>
     )
 
-  return <main className="flex w-full flex-col px-8 py-8"></main>
+  return (
+    <main className="flex w-full flex-col gap-4 px-8 py-8">
+      <CourseCover course={course} sections={content.sections} />
+    </main>
+  )
 }

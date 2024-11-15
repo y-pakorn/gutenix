@@ -1,3 +1,5 @@
+import { Address } from "viem"
+
 export type Course = {
   id: string
   title: string
@@ -7,4 +9,13 @@ export type Course = {
   tags: string[]
   author: string
   level: "Basic" | "Intermediate" | "Advanced" | "Expert" | "All Level"
+  access_price?: {
+    amount: number
+    recipient: Address
+  }
+  has_exam?: boolean
+  exam_price?: {
+    amount: number
+    recipient: Address
+  }
 }

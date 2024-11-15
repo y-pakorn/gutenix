@@ -5,7 +5,11 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_APP_URL: z.string().min(1),
   },
+  server: {
+    PRIVATE_KEY: z.string().min(1),
+  },
   runtimeEnv: {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    PRIVATE_KEY: process.env.PRIVATE_KEY,
   },
 })

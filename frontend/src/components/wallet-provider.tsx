@@ -27,7 +27,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
           showWalletLoginFirst: true,
         },
         defaultChain: supportedChains[0],
-        loginMethods: ["email", "wallet", "google", "apple", "farcaster"],
+        loginMethods: ["email", "wallet", "google", "farcaster"],
         loginMethodsAndOrder: {
           primary: [
             "email",
