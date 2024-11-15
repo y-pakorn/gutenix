@@ -81,6 +81,7 @@ contract CertificateNFT is
     ) external {
         uint256 tokenId = generateTokenId(recipient, certificateId);
         require(!_exists(tokenId), "Certificate already exists");
+        _mint(recipient, tokenId);
 
         bytes32 messageHash = keccak256(
             abi.encodePacked(recipient, certificateId, level, validityPeriod)
@@ -98,7 +99,7 @@ contract CertificateNFT is
             level: level
         });
 
-        _mint(recipient, tokenId);
+        // _mint(recipient, tokenId);
     }
 
     function updateStatus(
@@ -180,6 +181,6 @@ contract CertificateNFT is
     }
 
     function _exists(uint256 tokenId) internal view returns (bool) {
-        return ownerOf(tokenId) != address(0);
+        return _certificates[tokenId].issueTimestamp != 0;
     }
 }
