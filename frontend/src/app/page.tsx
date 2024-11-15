@@ -8,11 +8,12 @@ import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { Icons } from "@/components/icons"
 import { ModeToggle } from "@/components/mode-toggle"
 
-import { CourseFilter } from "./course-filter"
+import { CourseFilterSidebar } from "./course-filter"
 
 export default async function Home({
   searchParams: __,
@@ -86,32 +87,41 @@ export default async function Home({
         <h2>Start learning now, faster and easier than ever before.</h2>
       </div>
       <Separator className="my-8" />
-      <CourseFilter />
-      <div className="grid grid-cols-1 gap-4">
-        {shownCourses.map((course) => (
-          <div
-            key={course.id}
-            className="flex cursor-pointer items-center gap-4 transition-transform hover:scale-[1.02]"
-          >
-            <img
-              src={course.cover_image}
-              alt={course.title}
-              className="aspect-video h-32 rounded-xl object-cover"
-            />
-            <div className="space-y-1">
-              <h3 className="truncate text-xl font-semibold">{course.title}</h3>
-              <p className="truncate text-xs text-muted-foreground">
-                {course.author} | {course.level}
-              </p>
-              <p className="line-clamp-3 text-sm">{course.description}</p>
-              <div className="mt-1 flex items-center gap-2">
-                {course.tags.map((tag) => (
-                  <Badge variant="secondary">{_.startCase(tag)}</Badge>
-                ))}
+      <div className="flex gap-8">
+        <CourseFilterSidebar
+          className="w-44 shrink-0"
+          categories={categories}
+          tags={tags}
+          levels={levels}
+        />
+        <div className="grid grid-cols-1 gap-4">
+          {shownCourses.map((course) => (
+            <div
+              key={course.id}
+              className="flex cursor-pointer items-center gap-4 transition-transform duration-300 hover:scale-[1.02]"
+            >
+              <img
+                src={course.cover_image}
+                alt={course.title}
+                className="aspect-video h-32 rounded-xl object-cover"
+              />
+              <div className="space-y-1">
+                <h3 className="truncate text-xl font-semibold">
+                  {course.title}
+                </h3>
+                <p className="truncate text-xs text-muted-foreground">
+                  {course.author} | {course.level}
+                </p>
+                <p className="text-wrap text-sm">{course.description}</p>
+                <div className="mt-1 flex items-center gap-2">
+                  {course.tags.map((tag) => (
+                    <Badge variant="secondary">{_.startCase(tag)}</Badge>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </main>
   )
