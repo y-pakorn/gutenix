@@ -2,3 +2,4 @@
 contracts/cache/*
 contracts/.env
 contracts/broadcast/*
+contracts/cache/*
