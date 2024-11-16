@@ -52,6 +52,16 @@ contract CertificateNFT is
     using ECDSA for bytes32;
     using MessageHashUtils for bytes32;
 
+    event CertificateMinted(
+        address indexed recipient,
+        string indexed certificateId,
+        Level level,
+        uint256 validityPeriod,
+        uint256 price
+    );
+
+    event CertificateStatusUpdated(uint256 indexed tokenId, Status newStatus);
+
     struct Certificate {
         string certificateId;
         uint256 issueTimestamp;
@@ -106,6 +116,13 @@ contract CertificateNFT is
         });
 
         _mint(recipient, tokenId);
+        emit CertificateMinted(
+            recipient,
+            certificateId,
+            level,
+            validityPeriod,
+            price
+        );
     }
 
     function updateStatus(
@@ -114,6 +131,7 @@ contract CertificateNFT is
     ) external onlyOwner {
         require(_exists(tokenId), "Certificate does not exist");
         _certificates[tokenId].status = newStatus;
+        emit CertificateStatusUpdated(tokenId, newStatus);
     }
 
     function checkAndUpdateExpiry(uint256 tokenId) public {
