@@ -134,6 +134,9 @@ export function CourseCover({
         Category {">"} {course.category}
       </h1>
       <h1 className="text-4xl font-bold">{course.title}</h1>
+      <div className="text-sm">
+        Course ID: <span className="font-mono">{course.id}</span>
+      </div>
       <p>{course.description}</p>
       <p className="text-sm text-muted-foreground">
         Created by {course.author} | Course Level {course.level}

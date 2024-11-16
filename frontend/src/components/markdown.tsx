@@ -1,5 +1,8 @@
 import RMD, { Components } from "react-markdown"
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
+import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism"
 import rehypeKatex from "rehype-katex"
+import rehypeRaw from "rehype-raw"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 
@@ -42,6 +45,24 @@ const MDX_COMPONENTS: Partial<Components> = {
       {props.children}
     </TableCaption>
   ),
+  code({ node, inline, className, children, ...props }: any) {
+    const match = /language-(\w+)/.exec(className || "")
+
+    return !inline && match ? (
+      <SyntaxHighlighter
+        style={oneDark}
+        PreTag="div"
+        language={match[1]}
+        {...props}
+      >
+        {String(children).replace(/\n$/, "")}
+      </SyntaxHighlighter>
+    ) : (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    )
+  },
 } as const
 
 export function Markdown({
@@ -54,9 +75,9 @@ export function Markdown({
   return (
     <RMD
       remarkPlugins={[remarkGfm, remarkMath]}
-      rehypePlugins={[rehypeKatex]}
+      rehypePlugins={[rehypeKatex, rehypeRaw]}
       className={cn(
-        "prose dark:prose-invert prose-headings:text-primary prose-h2:text-4xl prose-h3:text-2xl prose-p:text-base min-w-full whitespace-normal text-primary",
+        "prose min-w-full whitespace-normal text-primary dark:prose-invert prose-headings:text-primary prose-h2:text-4xl prose-h3:text-2xl prose-p:text-base",
         className
       )}
       components={MDX_COMPONENTS}

@@ -11,7 +11,9 @@ import {
   Compass,
   Copy,
   Droplets,
+  Globe,
   LogOut,
+  Rss,
   SunMoon,
   Ticket,
 } from "lucide-react"
@@ -63,6 +65,21 @@ const NAVIGATIONS = [
         label: "Discover",
         href: "/",
         icon: Compass,
+      },
+    ],
+  },
+  {
+    label: "Integration",
+    items: [
+      {
+        label: "On-chain",
+        href: "/integration/on-chain",
+        icon: Rss,
+      },
+      {
+        label: "Off-chain",
+        href: "/integration/off-chain",
+        icon: Globe,
       },
     ],
   },
