@@ -6,7 +6,7 @@ export type SectionQuiz = {
   hint: string
 }
 
-export type OpenEndedQuizGrading = {
+export type QuizGrading = {
   result: "correct" | "partially_correct" | "incorrect"
   feedback: string
 }

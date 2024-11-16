@@ -101,8 +101,6 @@ export const generateExamQuiz = unstable_cache(
         .replaceAll("{context}", ""),
     })
 
-    console.log(object)
-
     return object as SectionQuiz[]
   },
   undefined,
@@ -135,4 +133,22 @@ export const gradeQuiz = async (
   })
 
   return object
+}
+
+export const gradeExam = async (
+  id: string,
+  quizes: SectionQuiz[],
+  answers: Record<number, string>
+) => {
+  const graded = await Promise.all(
+    quizes.map(async (quiz, i) => {
+      const answer = answers[i]
+      if (quiz.question_type === "open_ended") {
+        return gradeQuiz(id, quiz, answer).then((d) => d.result)
+      } else {
+        return quiz.answer === answer ? "correct" : "incorrect"
+      }
+    })
+  )
+  return graded
 }

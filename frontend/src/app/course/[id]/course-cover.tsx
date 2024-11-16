@@ -6,13 +6,7 @@ import { usePrivy } from "@privy-io/react-auth"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { waitForTransactionReceipt } from "viem/actions"
-import {
-  useAccount,
-  useClient,
-  useSimulateContract,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from "wagmi"
+import { useAccount, useClient, useWriteContract } from "wagmi"
 
 import { Course } from "@/types/course"
 import { CERTIFICATE_ABI } from "@/lib/certificate"
@@ -20,7 +14,6 @@ import { useCertificate } from "@/hooks/useCertificate"
 import { useChain } from "@/hooks/useChain"
 import { getMintSignature } from "@/services/signature"
 import { Button } from "@/components/ui/button"
-import { RainbowButton } from "@/components/ui/rainbow-button"
 
 export function CourseCover({
   course,
@@ -31,6 +24,7 @@ export function CourseCover({
 }) {
   const accessCertificate = useCertificate(course.id)
   const examCertificate = useCertificate(`${course.id}-exam`)
+  const certCertificate = useCertificate(`${course.id}-certificate`)
   const chain = useChain()
 
   const privy = usePrivy()
@@ -155,20 +149,23 @@ export function CourseCover({
             >
               Go Learn!
             </Button>
-            {course.has_exam &&
+            {course.exam &&
               (examCertificate.certificate ? (
                 <Button
                   onClick={() => {
                     router.push(`/course/${course.id}/exam`)
                   }}
+                  disabled={!!certCertificate.certificate}
                 >
-                  Take Exam For Certificate!
+                  {certCertificate.certificate
+                    ? "Certificate Already Taken!"
+                    : "Take Exam For Certificate!"}
                 </Button>
               ) : (
                 <Button disabled={isBuyingExam} onClick={buyExam}>
                   Certified Now For{" "}
-                  {course.exam_price?.amount
-                    ? `${course.exam_price.amount} ${chain.nativeCurrency.symbol}`
+                  {course.exam.price?.amount
+                    ? `${course.exam.price.amount} ${chain.nativeCurrency.symbol}`
                     : "Free"}
                   !{" "}
                   {isBuyingExam && (

@@ -4,7 +4,6 @@ import { Address, encodePacked, keccak256, parseEther } from "viem"
 import { signMessage } from "viem/accounts"
 
 import { env } from "@/env.mjs"
-import { Course } from "@/types/course"
 
 import { getCourse } from "./course"
 
@@ -27,7 +26,7 @@ export const getMintSignature = async (
     stage === "access"
       ? parseEther(course?.access_price?.amount?.toString() || "0")
       : stage === "exam"
-        ? parseEther(course?.exam_price?.amount?.toString() || "0")
+        ? parseEther(course?.exam?.price?.amount?.toString() || "0")
         : 0n
   const message = keccak256(
     encodePacked(

@@ -16,3 +16,5 @@ export const siteConfig: SiteConfig = {
   },
   ogImage: `${env.NEXT_PUBLIC_APP_URL}/og.jpg`,
 }
+
+export const VALIDITY_THRESHOLD = 100000000000n

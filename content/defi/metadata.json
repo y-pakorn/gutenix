@@ -6,9 +6,11 @@
   "cover_image": "https://beincrypto.com/wp-content/uploads/2021/05/bic_artwork_defi.jpg.webp",
   "author": "yoyo & claude",
   "level": "Basic",
-  "has_exam": true,
-  "exam_price": {
-    "amount": 0.001,
-    "recipient": "0x4A19373AA0776916F1A670191d2b8af6b8FA2399"
+  "exam": {
+    "validity": 31536000,
+    "price": {
+      "amount": 0.001,
+      "recipient": "0x4A19373AA0776916F1A670191d2b8af6b8FA2399"
+    }
   }
 }

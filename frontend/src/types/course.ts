@@ -13,9 +13,11 @@ export type Course = {
     amount: number
     recipient: Address
   }
-  has_exam?: boolean
-  exam_price?: {
-    amount: number
-    recipient: Address
+  exam?: {
+    validity?: number // relative number of seconds
+    price?: {
+      amount: number
+      recipient: Address
+    }
   }
 }

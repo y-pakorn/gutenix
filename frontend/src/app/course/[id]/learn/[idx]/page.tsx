@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react"
 
-import { OpenEndedQuizGrading, SectionQuiz } from "@/types/quiz"
+import { QuizGrading, SectionQuiz } from "@/types/quiz"
 import { fireConfettiSide, fireSadEmojiAbove } from "@/lib/confetti"
 import { cn } from "@/lib/utils"
 import { generateCourseSectionQuiz, gradeQuiz } from "@/services/ai"
@@ -133,7 +133,7 @@ function Quiz({
   const [answer, setAnswer] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [grade, setGrade] = useState<OpenEndedQuizGrading | null>(null)
+  const [grade, setGrade] = useState<QuizGrading | null>(null)
 
   return (
     <div className="flex flex-col gap-4 rounded-md border p-4">
