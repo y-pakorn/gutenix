@@ -20,6 +20,7 @@ import { useCertificate } from "@/hooks/useCertificate"
 import { useChain } from "@/hooks/useChain"
 import { getMintSignature } from "@/services/signature"
 import { Button } from "@/components/ui/button"
+import { RainbowButton } from "@/components/ui/rainbow-button"
 
 export function CourseCover({
   course,
@@ -29,14 +30,16 @@ export function CourseCover({
   sections: string[]
 }) {
   const accessCertificate = useCertificate(course.id)
+  const examCertificate = useCertificate(`${course.id}-exam`)
   const chain = useChain()
 
   const privy = usePrivy()
   const account = useAccount()
 
-  const { writeContractAsync } = useWriteContract()
-  const [isBuying, setIsBuying] = useState(false)
   const client = useClient() as any
+  const { writeContractAsync } = useWriteContract()
+
+  const [isBuying, setIsBuying] = useState(false)
   const buyCourse = async () => {
     if (!privy.authenticated || !account.address) return
 
@@ -78,6 +81,48 @@ export function CourseCover({
     }
   }
 
+  const [isBuyingExam, setIsBuyingExam] = useState(false)
+  const buyExam = async () => {
+    if (!privy.authenticated || !account.address) return
+
+    setIsBuyingExam(true)
+    try {
+      const level = 0
+      const validity = 1000000000000n
+      const { signature, value, id } = await getMintSignature(
+        account.address,
+        course.id,
+        level,
+        validity,
+        "exam"
+      )
+      const txHash = await writeContractAsync({
+        abi: CERTIFICATE_ABI,
+        address: chain.certificate,
+        functionName: "mint",
+        args: [account.address, id, level, validity, value, signature],
+        value,
+      })
+      const receipt = await waitForTransactionReceipt(client, {
+        hash: txHash,
+      })
+
+      if (receipt.status === "reverted") {
+        toast.error("Transaction failed", {
+          description: `Transaction hash: ${txHash}`,
+        })
+        return
+      }
+
+      toast.success("Exam access granted!", {
+        description: `Transaction hash: ${txHash}`,
+      })
+      examCertificate.refetch()
+    } finally {
+      setIsBuyingExam(false)
+    }
+  }
+
   const router = useRouter()
 
   return (
@@ -94,13 +139,36 @@ export function CourseCover({
       </p>
       <div className="flex items-center gap-2">
         {accessCertificate.certificate ? (
-          <Button
-            onClick={() => {
-              router.push(`/course/${course.id}/learn/0`)
-            }}
-          >
-            Go Learn!
-          </Button>
+          <>
+            <Button
+              onClick={() => {
+                router.push(`/course/${course.id}/learn/0`)
+              }}
+            >
+              Go Learn!
+            </Button>
+            {course.has_exam &&
+              (examCertificate.certificate ? (
+                <Button
+                  onClick={() => {
+                    router.push(`/course/${course.id}/exam`)
+                  }}
+                >
+                  Take Exam For Certificate!
+                </Button>
+              ) : (
+                <Button disabled={isBuyingExam} onClick={buyExam}>
+                  Certified Now For{" "}
+                  {course.exam_price?.amount
+                    ? `${course.exam_price.amount} ${chain.nativeCurrency.symbol}`
+                    : "Free"}
+                  !{" "}
+                  {isBuyingExam && (
+                    <Loader2 className="ml-2 size-4 animate-spin" />
+                  )}
+                </Button>
+              ))}
+          </>
         ) : (
           <Button onClick={buyCourse} disabled={isBuying}>
             Get Course For{" "}

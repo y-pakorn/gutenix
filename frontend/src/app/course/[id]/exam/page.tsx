@@ -8,6 +8,8 @@ import { Loader2 } from "lucide-react"
 import { SectionQuiz } from "@/types/quiz"
 import { generateExamQuiz } from "@/services/ai"
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 
 export default function Page() {
@@ -39,10 +41,15 @@ export default function Page() {
   return (
     <main className="flex w-full flex-col gap-4 px-8 py-8">
       <h1 className="text-4xl font-bold">Exam</h1>
-      <p>{"Let's see how much you've learned in this course. Good luck!"}</p>
+      <p className="text-muted-foreground">
+        {"Let's see how much you've learned in this course. Good luck!"}
+      </p>
       {quizes.data.map((quiz, i) => (
         <Quiz key={i} id={id} question={quiz} index={i} />
       ))}
+      <div className="flex items-center gap-2">
+        <Button>Confirm And Submit</Button>
+      </div>
     </main>
   )
 }
@@ -60,23 +67,21 @@ function Quiz({
 
   return (
     <div className="flex w-full flex-col gap-4 rounded-md border p-4">
-      <h1 className="text-xl font-bold">Quiz #{index}</h1>
+      <h1 className="text-xl font-bold">Quiz #{index + 1}</h1>
       <h2>{question.question}</h2>
       {question.question_type === "multiple_choice" ? (
-        <div className="grid grid-cols-2 gap-2">
+        <RadioGroup
+          className="grid grid-cols-2 gap-2"
+          value={answer || undefined}
+          onValueChange={setAnswer}
+        >
           {question.choices?.map((choice, i) => (
-            <Button
-              key={i}
-              className="h-fit min-h-10 whitespace-pre-wrap rounded-md"
-              onClick={() => {
-                setAnswer((prev) => (prev === choice ? null : choice))
-              }}
-              variant={answer === choice ? "secondary" : "outline"}
-            >
-              {choice}
-            </Button>
+            <div key={i} className="flex items-center gap-2">
+              <RadioGroupItem value={choice} id={choice} />
+              <Label htmlFor={choice}>{choice}</Label>
+            </div>
           ))}
-        </div>
+        </RadioGroup>
       ) : (
         <Textarea
           value={answer || ""}

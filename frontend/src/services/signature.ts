@@ -17,6 +17,12 @@ export const getMintSignature = async (
 ) => {
   const course = await getCourse(courseId)
   if (!course) throw new Error("Course not found")
+  const id =
+    stage === "access"
+      ? courseId
+      : stage === "exam"
+        ? `${courseId}-exam`
+        : `${courseId}-certificate`
   const value =
     stage === "access"
       ? parseEther(course?.access_price?.amount?.toString() || "0")
@@ -26,7 +32,7 @@ export const getMintSignature = async (
   const message = keccak256(
     encodePacked(
       ["address", "string", "uint8", "uint256", "uint256"],
-      [recipient, courseId, level, BigInt(validityPeriod), value]
+      [recipient, id, level, validityPeriod, value]
     )
   )
 
@@ -38,5 +44,6 @@ export const getMintSignature = async (
       privateKey: env.PRIVATE_KEY as Address,
     }),
     value,
+    id,
   }
 }

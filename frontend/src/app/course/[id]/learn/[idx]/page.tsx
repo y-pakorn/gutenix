@@ -4,7 +4,14 @@ import { useState } from "react"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import _ from "lodash"
-import { Check, ChevronLeft, ChevronRight, Loader2, X } from "lucide-react"
+import {
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Home,
+  Loader2,
+  X,
+} from "lucide-react"
 
 import { OpenEndedQuizGrading, SectionQuiz } from "@/types/quiz"
 import { fireConfettiSide, fireSadEmojiAbove } from "@/lib/confetti"
@@ -90,7 +97,7 @@ export default function Page() {
           </Button>
         )}
         <div className="flex-1" />
-        {course.data.hasNext && (
+        {course.data.hasNext ? (
           <Button
             variant="outline"
             onClick={() => {
@@ -98,6 +105,15 @@ export default function Page() {
             }}
           >
             Next <ChevronRight className="ml-2 size-4" />
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            onClick={() => {
+              router.push(`/course/${id}`)
+            }}
+          >
+            Back To Course <Home className="ml-2 size-4" />
           </Button>
         )}
       </div>
