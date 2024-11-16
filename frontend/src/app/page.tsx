@@ -88,7 +88,7 @@ export default async function Home({
                 alt={course.title}
                 className="aspect-video h-32 rounded-xl object-cover"
               />
-              <div className="space-y-1">
+              <div className="space-y-2">
                 <h3 className="truncate text-xl font-semibold">
                   {course.title}
                 </h3>

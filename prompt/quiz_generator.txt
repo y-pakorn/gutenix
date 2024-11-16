@@ -1,9 +1,17 @@
 Write a {question_type} question about {topic} that is {difficulty} and tests for {objective} objective.
 the ojective is based the learning taxonomy which is remember, understanding, analyzing, evaluating, creating.
+
 based on the following reference content
 {content}
 
-the qusetion should be JSON follow with the following fields:
+{context}
+
+the question should be object follow with the following fields:
+- question_type: multiple_choice or open_ended
 - question: question text
 - choices: list of choices (optional) if question_type is multiple_choice. otherwise, remove this line
 - answer: correct answer
+
+generate total of {total_questions} questions
+
+return the data as a list of object in JSON format

@@ -30,6 +30,7 @@ export const chains = {
 >
 
 export const config = createConfig({
+  ssr: true,
   chains: supportedChains,
   transports: {
     [sepolia.id]: http(),

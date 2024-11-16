@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { usePrivy } from "@privy-io/react-auth"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
@@ -50,7 +51,6 @@ export function CourseCover({
         validity,
         "access"
       )
-      console.log(account.address)
       const txHash = await writeContractAsync({
         abi: CERTIFICATE_ABI,
         address: chain.certificate,
@@ -78,6 +78,8 @@ export function CourseCover({
     }
   }
 
+  const router = useRouter()
+
   return (
     <div className="space-y-4">
       <img
@@ -92,7 +94,13 @@ export function CourseCover({
       </p>
       <div className="flex items-center gap-2">
         {accessCertificate.certificate ? (
-          <Button>Go Learn!</Button>
+          <Button
+            onClick={() => {
+              router.push(`/course/${course.id}/learn/0`)
+            }}
+          >
+            Go Learn!
+          </Button>
         ) : (
           <Button onClick={buyCourse} disabled={isBuying}>
             Get Course For{" "}

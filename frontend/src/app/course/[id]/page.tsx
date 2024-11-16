@@ -2,8 +2,8 @@ import { getCourse, getCourseContent } from "@/services/course"
 
 import { CourseCover } from "./course-cover"
 
-export default async function Page(p: { params: Promise<{ id: string[] }> }) {
-  const id = await p.params.then((p) => p.id?.[0])
+export default async function Page(p: { params: Promise<{ id: string }> }) {
+  const id = await p.params.then((p) => p.id)
   const course = await getCourse(id)
   const content = await getCourseContent(id)
 
