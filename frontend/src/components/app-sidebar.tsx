@@ -70,7 +70,7 @@ const NAVIGATIONS = [
     items: [
       {
         label: "Courses",
-        href: "/dashboard",
+        href: "/my-courses",
         icon: BookOpenText,
       },
       {

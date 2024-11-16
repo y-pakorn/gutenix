@@ -14,12 +14,12 @@ export const chains = {
   [sepolia.id]: {
     ...sepolia,
     icon: "https://cryptologos.cc/logos/versions/ethereum-eth-logo-diamond-purple.svg?v=035",
-    certificate: "0xb68970cdbcf04dd75059e17ca14a9fea3523b5c7",
+    certificate: "0xc50b929b314b3eb25500a35bfb316f151291c36c",
   },
   [bitkubTestnet.id]: {
     ...bitkubTestnet,
     icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWAq1En4qP37TZ3ahnsZZYBiURq3iE6gCPwA&s",
-    certificate: "0x1995eE7C84E01fe47A54D272a32e87Ab84E59F32",
+    certificate: "0x",
   },
 } as Record<
   number,

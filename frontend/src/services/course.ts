@@ -20,6 +20,11 @@ export const getAllCourses = async () => {
   return courses
 }
 
+export const getAllCoursesIds = async () => {
+  const courses = await readdir("../content")
+  return courses
+}
+
 export const getCourse = async (id?: string) => {
   try {
     if (!id) return null
