@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { usePrivy } from "@privy-io/react-auth"
@@ -10,7 +11,6 @@ import {
   Compass,
   Copy,
   Droplets,
-  Library,
   LogOut,
   SunMoon,
   Ticket,
@@ -108,7 +108,13 @@ export function AppSidebar() {
       <Sidebar variant="floating">
         <SidebarHeader className="p-4">
           <Link href="/" className="flex items-center gap-2">
-            <Library className="size-6" />
+            <Image
+              src="/icon.png"
+              alt={siteConfig.name}
+              width={32}
+              height={32}
+              className="fill-primary dark:invert"
+            />
             <h1 className="text-lg font-bold">{siteConfig.name}</h1>
           </Link>
         </SidebarHeader>

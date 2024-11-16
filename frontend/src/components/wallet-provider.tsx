@@ -5,6 +5,7 @@ import { PrivyProvider } from "@privy-io/react-auth"
 import { WagmiProvider } from "@privy-io/wagmi"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
+import { env } from "@/env.mjs"
 import { siteConfig } from "@/config/site"
 import { config, supportedChains } from "@/config/web3"
 
@@ -22,9 +23,9 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         supportedChains: [...supportedChains],
         appearance: {
           landingHeader: `Welcome to ${siteConfig.name}`,
-          loginMessage: "Login or create an account to get started",
           walletChainType: "ethereum-only",
           showWalletLoginFirst: true,
+          logo: `${env.NEXT_PUBLIC_APP_URL}/icon_name.png`,
         },
         defaultChain: supportedChains[0],
         loginMethods: ["email", "wallet", "google", "farcaster"],

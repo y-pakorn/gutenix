@@ -138,7 +138,15 @@ export function CourseCover({
         Created by {course.author}
       </p>
       <div className="flex items-center gap-2">
-        {accessCertificate.certificate ? (
+        {!privy.authenticated ? (
+          <Button
+            onClick={() => {
+              privy.login()
+            }}
+          >
+            Go Learn!
+          </Button>
+        ) : accessCertificate.certificate ? (
           <>
             <Button
               onClick={() => {
