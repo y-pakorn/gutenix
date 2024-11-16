@@ -7,11 +7,11 @@ based on the following reference content
 {context}
 
 the question should be object follow with the following fields:
-- question_type: multiple_choice or open_ended
+- question_type: multiple_choice (choice based question) or open_ended (text based question with no choices and open ended)
 - question: question text
-- choices: list of choices (optional) if question_type is multiple_choice. otherwise, remove this line
+- choices: list of choices (optional) if question_type is multiple_choice. otherwise, remove this line, not required for open_ended
 - answer: correct answer
 
-generate total of {total_questions} questions
+generate total of {total_questions} questions, try to mix in different question types
 
 return the data as a list of object in JSON format

@@ -2,9 +2,10 @@
 
 import { readFile } from "fs/promises"
 import { unstable_cache } from "next/cache"
-import { generateObject, generateText } from "ai"
+import { generateObject } from "ai"
 import { z } from "zod"
 
+import { SectionQuiz } from "@/types/quiz"
 import { model } from "@/config/ai"
 
 import { getCourseContent } from "./course"
@@ -39,7 +40,7 @@ export const generateCourseSectionQuiz = unstable_cache(
       prompt: prompt
         .replaceAll("{question_type}", "quiz")
         .replaceAll("{topic}", section)
-        .replaceAll("{difficulty}", "easy")
+        .replaceAll("{difficulty}", "intermediate")
         .replaceAll("{objective}", "understanding")
         .replaceAll("{content}", content.content)
         .replaceAll("{total_questions}", "2")
@@ -50,7 +51,7 @@ ${sectionContent}`
         ),
     })
 
-    return object
+    return object as SectionQuiz[]
   },
   undefined,
   {
@@ -58,3 +59,28 @@ ${sectionContent}`
     tags: ["course-section-quiz"],
   }
 )
+
+export const gradeQuiz = async (
+  courseId: string,
+  quiz: SectionQuiz,
+  answer: string
+) => {
+  const courseContent = await getCourseContent(courseId)
+  if (!courseContent) throw new Error("Course not found")
+  const prompt = await readFile(`../prompt/quiz_grader.txt`, "utf8")
+  const { object } = await generateObject({
+    model,
+    mode: "json",
+    schema: z.object({
+      result: z.enum(["correct", "partially_correct", "incorrect"]),
+      feedback: z.string(),
+    }),
+    prompt: prompt
+      .replaceAll("{reference_content}", courseContent.content)
+      .replaceAll("{question}", quiz.question)
+      .replaceAll("{reference_answer}", quiz.answer)
+      .replaceAll("{user_answer}", answer),
+  })
+
+  return object
+}

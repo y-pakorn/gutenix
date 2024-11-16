@@ -3,10 +3,12 @@ Based on the following reference content:
 
 Question: {question}
 
-Reference Answer: {answer}
+Reference Answer: {reference_answer}
 
-User Answer: {user_answer}
+Answer: {user_answer}
 
-Please grade the user's answer based on the reference answer. The grading should be JSON format with the following fields:
+Please grade the user's answer based on the "reference_answer" and user intention. The grading should be JSON format with the following fields:
 - result: correct, partially_correct, incorrect. 
 - feedback: feedback text
+
+Do not reference the "reference_content" and the "reference_answer" in the feedback text. Include the content directly.
