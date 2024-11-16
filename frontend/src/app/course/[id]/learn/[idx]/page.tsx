@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import _ from "lodash"
-import { Check, Loader2, X } from "lucide-react"
+import { Check, ChevronLeft, ChevronRight, Loader2, X } from "lucide-react"
 
 import { OpenEndedQuizGrading, SectionQuiz } from "@/types/quiz"
 import { fireConfettiSide, fireSadEmojiAbove } from "@/lib/confetti"
@@ -14,6 +14,7 @@ import { getCourseContentBySectionIndex } from "@/services/course"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Textarea } from "@/components/ui/textarea"
 import { Markdown } from "@/components/markdown"
 
@@ -61,9 +62,21 @@ export default function Page() {
   return (
     <main className="flex w-full flex-col gap-4 px-8 py-8">
       <Markdown>{course.data.content}</Markdown>
-      {quiz.data?.map((question, i) => (
-        <Quiz key={i} question={question} index={i} id={id} />
-      ))}
+      <div className="mt-8 space-y-4">
+        {quiz.isLoading
+          ? _.range(2).map((i) => (
+              <div key={i} className="space-y-2">
+                <Skeleton className="h-10 w-1/2" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="ml-auto h-10 w-1/4" />
+              </div>
+            ))
+          : quiz.data?.map((question, i) => (
+              <Quiz key={i} question={question} index={i} id={id} />
+            ))}
+      </div>
       <div className="flex items-center gap-2">
         {course.data.hasPrev && (
           <Button
@@ -72,6 +85,7 @@ export default function Page() {
               router.push(`/course/${id}/learn/${idx - 1}`)
             }}
           >
+            <ChevronLeft className="mr-2 size-4" />
             Previous
           </Button>
         )}
@@ -83,7 +97,7 @@ export default function Page() {
               router.push(`/course/${id}/learn/${idx + 1}`)
             }}
           >
-            Next
+            Next <ChevronRight className="ml-2 size-4" />
           </Button>
         )}
       </div>
@@ -104,8 +118,6 @@ function Quiz({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [grade, setGrade] = useState<OpenEndedQuizGrading | null>(null)
-
-  console.log(question)
 
   return (
     <div className="flex flex-col gap-4 rounded-md border p-4">
@@ -165,7 +177,7 @@ function Quiz({
           )}
         >
           <div className="text-xl font-bold">
-            {question.answer === answer ? "Correct" : "Wrong"}!
+            {question.answer === answer ? "Correct" : "Incorrect"}!
           </div>
           {question.answer !== answer && <div>{question.hint}</div>}
         </div>
