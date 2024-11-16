@@ -91,15 +91,15 @@ export default async function Home({
                 alt={course.title}
                 className="aspect-video h-32 rounded-xl object-cover"
               />
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <h3 className="truncate text-xl font-semibold">
                   {course.title}
                 </h3>
                 <p className="truncate text-xs text-muted-foreground">
                   {course.author} | {course.level}
                 </p>
-                <p className="text-wrap text-sm">{course.description}</p>
-                <div className="mt-1 flex items-center gap-2">
+                <p className="text-wrap text-xs">{course.description}</p>
+                <div className="mt-2 flex items-center gap-2">
                   {course.tags.map((tag, i) => (
                     <Badge variant="secondary" key={i}>
                       {_.startCase(tag)}

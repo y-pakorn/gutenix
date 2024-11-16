@@ -76,7 +76,7 @@ const NAVIGATIONS = [
       },
       {
         label: "Certificates",
-        href: "/certificates",
+        href: "/my-certificates",
         icon: Ticket,
       },
     ],

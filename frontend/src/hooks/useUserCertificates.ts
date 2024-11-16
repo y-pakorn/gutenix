@@ -5,16 +5,16 @@ import { useAccount, usePublicClient } from "wagmi"
 
 import { Certificate } from "@/types/certificate"
 import { CERTIFICATE_ABI, getCertificateId } from "@/lib/certificate"
-import { getAllCoursesIds, getCourse } from "@/services/course"
+import { getAllCoursesIds } from "@/services/course"
 
 import { useChain } from "./useChain"
 
-export const useUserCertificates = () => {
+export const useUserCertificates = (suffix?: string) => {
   const account = useAccount()
   const client = usePublicClient()
   const chain = useChain()
   const data = useQuery({
-    queryKey: ["user-certificates", account.address, chain.id],
+    queryKey: ["user-certificates", account.address, chain.id, suffix],
     queryFn: async () => {
       if (!account.address) return null
       const courseIds = await getAllCoursesIds()
@@ -28,7 +28,10 @@ export const useUserCertificates = () => {
                 functionName: "getCertificateInfo",
                 args: [
                   fromHex(
-                    getCertificateId(account.address!, courseId),
+                    getCertificateId(
+                      account.address!,
+                      suffix ? `${courseId}${suffix}` : courseId
+                    ),
                     "bigint"
                   ),
                 ],
