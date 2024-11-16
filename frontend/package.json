@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.72",
+    "@pcd/gpc": "^0.4.0",
+    "@pcd/pod": "^0.5.0",
     "@privy-io/react-auth": "^1.94.2",
     "@privy-io/wagmi": "^0.2.12",
     "@radix-ui/react-avatar": "^1.1.1",

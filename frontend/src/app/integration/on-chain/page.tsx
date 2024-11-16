@@ -2,14 +2,12 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Check, ChevronsUpDown } from "lucide-react"
 import { Address, fromHex } from "viem"
 import { readContract } from "viem/actions"
 import { useAccount, useClient } from "wagmi"
 
 import { Course } from "@/types/course"
 import { CERTIFICATE_ABI, getCertificateId } from "@/lib/certificate"
-import { cn } from "@/lib/utils"
 import { useAllCourses } from "@/hooks/useAllCourses"
 import { useChain } from "@/hooks/useChain"
 import { Button } from "@/components/ui/button"
@@ -21,20 +19,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command"
 import { Input } from "@/components/ui/input"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+import { LabelS } from "@/components/ui/label"
+import { DropDown } from "@/components/dropdown"
 import { Markdown } from "@/components/markdown"
 
 export default function Page() {
@@ -123,89 +110,6 @@ function placeComplexTrade(
       </Markdown>
     </main>
   )
-}
-
-function DropDown({
-  items,
-  value,
-  setValue,
-  selectLabel,
-  className,
-}: {
-  items: {
-    value: string
-    label: string
-  }[]
-  value: string
-  setValue: (value: string) => void
-  selectLabel: string
-  className?: string
-}) {
-  const [open, setOpen] = useState(false)
-  const selectedItem = items.find((it) => it.value === value)
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className={cn("min-w-[200px] justify-between", className)}
-        >
-          {selectedItem ? (
-            <>
-              {selectedItem.label}
-              {selectedItem.value === "." ? (
-                ""
-              ) : (
-                <span className="font-mono">({selectedItem.value})</span>
-              )}
-            </>
-          ) : (
-            selectLabel
-          )}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="min-w-[400px] p-0">
-        <Command>
-          <CommandInput placeholder={selectLabel} />
-          <CommandList>
-            <CommandEmpty>No result found.</CommandEmpty>
-            <CommandGroup>
-              {items.map((it) => (
-                <CommandItem
-                  key={it.value}
-                  value={it.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
-                    setOpen(false)
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === it.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {it.label}{" "}
-                  {it.value === "." ? (
-                    ""
-                  ) : (
-                    <span className="font-mono">({it.value})</span>
-                  )}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  )
-}
-
-function LabelS({ children }: { children: string }) {
-  return <div className="text-sm text-muted-foreground">{children}</div>
 }
 
 function TokenIdBlock({ courses }: { courses: Course[] }) {
@@ -297,8 +201,8 @@ function TokenIdBlock({ courses }: { courses: Course[] }) {
           Calculate
         </Button>
         {result && (
-          <div className="text-sm">
-            Result: <span className="font-mono">{result?.toString()}</span>
+          <div className="whitespace-pre text-wrap break-all font-mono text-sm">
+            {result?.toString()}
           </div>
         )}
       </CardFooter>
@@ -353,7 +257,9 @@ function GetCertificateBlock() {
         >
           Get Certificate Info
         </Button>
-        <span className="font-mono">{result?.toString()}</span>
+        <div className="whitespace-pre text-wrap break-all font-mono text-sm">
+          {result?.toString()}
+        </div>
       </CardFooter>
     </Card>
   )

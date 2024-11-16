@@ -27,8 +27,8 @@ import {
   useSwitchChain,
 } from "wagmi"
 
+import { chains } from "@/config/chains"
 import { siteConfig } from "@/config/site"
-import { chains } from "@/config/web3"
 import { useChain } from "@/hooks/useChain"
 import {
   Sidebar,
@@ -160,7 +160,7 @@ export function AppSidebar() {
                     <DropdownMenuRadioGroup
                       value={`${chain.id}`}
                       onValueChange={async (value) => {
-                        switchChainAsync({
+                        await switchChainAsync({
                           chainId: parseInt(value) as any,
                         })
                         toast.success("Chain switched", {

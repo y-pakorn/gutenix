@@ -23,4 +23,8 @@ const Label = React.forwardRef<
 ))
 Label.displayName = LabelPrimitive.Root.displayName
 
-export { Label }
+function LabelS({ children }: { children: string }) {
+  return <div className="text-sm text-muted-foreground">{children}</div>
+}
+
+export { Label, LabelS }

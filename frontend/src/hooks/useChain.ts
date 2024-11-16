@@ -1,8 +1,7 @@
 import { useMemo } from "react"
-import { Chain } from "viem"
 import { useChainId } from "wagmi"
 
-import { chains } from "@/config/web3"
+import { chains } from "@/config/chains"
 
 export const useChain = () => {
   const chainId = useChainId()

@@ -6,8 +6,9 @@ import { WagmiProvider } from "@privy-io/wagmi"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 import { env } from "@/env.mjs"
+import { supportedChains } from "@/config/chains"
 import { siteConfig } from "@/config/site"
-import { config, supportedChains } from "@/config/web3"
+import { config } from "@/config/web3"
 
 const queryClient = new QueryClient()
 
