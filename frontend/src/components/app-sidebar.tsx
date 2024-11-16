@@ -25,6 +25,7 @@ import {
   useSwitchChain,
 } from "wagmi"
 
+import { siteConfig } from "@/config/site"
 import { chains } from "@/config/web3"
 import { useChain } from "@/hooks/useChain"
 import {
@@ -108,7 +109,7 @@ export function AppSidebar() {
         <SidebarHeader className="p-4">
           <Link href="/" className="flex items-center gap-2">
             <Library className="size-6" />
-            <h1 className="text-lg font-bold">Redacted</h1>
+            <h1 className="text-lg font-bold">{siteConfig.name}</h1>
           </Link>
         </SidebarHeader>
         <SidebarSeparator />

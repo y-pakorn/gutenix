@@ -60,13 +60,16 @@ export default async function Home({
   return (
     <main className="flex w-full flex-col px-8 py-8">
       <div className="space-y-2">
-        <h1 className="text-xl font-bold">{siteConfig.name}</h1>
-        <h1 className="text-5xl font-semibold">
-          Future Of Education
-          <br />
-          Right In Your Hand
+        <h1 className="text-xl font-bold">
+          {siteConfig.name} - The World University
         </h1>
-        <h2>Start learning now, faster and easier than ever before.</h2>
+        <h1 className="text-5xl font-semibold">
+          From Those Who Have
+          <br /> To Those Who Seek
+        </h1>
+        <h2 className="text-muted-foreground">
+          Start learning now, faster and easier than ever before.
+        </h2>
       </div>
       <Separator className="my-8" />
       <div className="flex gap-8">
