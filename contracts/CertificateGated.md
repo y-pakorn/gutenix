@@ -1,7 +1,9 @@
 # on chain integration guide
 Integration guide for the Certification NFT contract that verifies professional certifications on-chain. Each NFT contains certification ID, issue time, expire time, and status (active, expired, revoked).
 
-## Access data
+[see example code here](https://github.com/y-pakorn/redacted/tree/main/contracts/src)
+
+## Code Snipped 
 #### ICertificateValidator
 ``` solidity
 interface ICertificateValidator {
@@ -40,8 +42,6 @@ interface ICertificateMetadata {
 }
 ```
 
-## modifier usage
-
 #### CertificateGated
 ``` solidity
 
@@ -73,7 +73,7 @@ contract CertificateGated {
 }
 ```
 
-### example use case
+#### example use case
 
 ``` solidity
 
