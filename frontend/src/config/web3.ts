@@ -1,5 +1,15 @@
 import { createConfig } from "@privy-io/wagmi"
-import { bitkubTestnet, sepolia } from "viem/chains"
+import {
+  baseSepolia,
+  bitkubTestnet,
+  flowTestnet,
+  lineaSepolia,
+  morphSepolia,
+  polygonAmoy,
+  scrollSepolia,
+  sepolia,
+  zircuitTestnet,
+} from "viem/chains"
 import { http } from "wagmi"
 
 import { supportedChains } from "./chains"
@@ -16,6 +26,13 @@ export const config = createConfig({
   transports: {
     [sepolia.id]: http(),
     [bitkubTestnet.id]: http(),
+    [polygonAmoy.id]: http(),
+    [flowTestnet.id]: http(),
+    [scrollSepolia.id]: http(),
+    [zircuitTestnet.id]: http(),
+    [baseSepolia.id]: http(),
+    [morphSepolia.id]: http(),
+    [lineaSepolia.id]: http(),
   },
   batch: {
     multicall: {
