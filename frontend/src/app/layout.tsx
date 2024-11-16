@@ -1,18 +1,17 @@
 import "@/styles/globals.css"
 
 import type { Metadata, Viewport } from "next"
-import { Sora } from "next/font/google"
+import { Host_Grotesk } from "next/font/google"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import Confetti from "@/components/ui/confetti"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { Toaster } from "@/components/ui/sonner"
 import { AppSidebar } from "@/components/app-sidebar"
 import { ThemeProvider } from "@/components/theme-provider"
 import { WalletProvider } from "@/components/wallet-provider"
 
-const font = Sora({
+const font = Host_Grotesk({
   subsets: ["latin"],
 })
 

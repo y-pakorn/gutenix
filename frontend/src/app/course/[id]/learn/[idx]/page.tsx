@@ -123,12 +123,12 @@ function Quiz({
               {answer === choice &&
                 isSubmitted &&
                 answer === question.answer && (
-                  <Check className="ml-2 size-4 rounded-full bg-green-500 p-1" />
+                  <Check className="ml-2 size-4 shrink-0 rounded-full bg-green-500 p-1" />
                 )}
               {answer === choice &&
                 isSubmitted &&
                 answer !== question.answer && (
-                  <X className="ml-2 size-4 rounded-full bg-red-500 p-1" />
+                  <X className="ml-2 size-4 shrink-0 rounded-full bg-red-500 p-1" />
                 )}
             </Button>
           ))}

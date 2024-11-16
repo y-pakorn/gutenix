@@ -30,7 +30,11 @@ export const generateCourseSectionQuiz = unstable_cache(
       model,
       schema: z.array(
         z.object({
-          question_type: z.string(),
+          question_type: z
+            .enum(["multiple_choice", "open_ended"])
+            .describe(
+              "The type of question to generate, must be either 'multiple_choice' or 'open_ended'"
+            ),
           question: z.string(),
           choices: z.array(z.string()).optional(),
           answer: z.string(),
@@ -40,7 +44,7 @@ export const generateCourseSectionQuiz = unstable_cache(
       prompt: prompt
         .replaceAll("{question_type}", "quiz")
         .replaceAll("{topic}", section)
-        .replaceAll("{difficulty}", "intermediate")
+        .replaceAll("{difficulty}", "easy-intermediate")
         .replaceAll("{objective}", "understanding")
         .replaceAll("{content}", content.content)
         .replaceAll("{total_questions}", "2")
@@ -57,6 +61,48 @@ ${sectionContent}`
   {
     revalidate: 60 * 60 * 24 * 7,
     tags: ["course-section-quiz"],
+  }
+)
+
+export const generateExamQuiz = unstable_cache(
+  async (courseId: string) => {
+    const content = await getCourseContent(courseId)
+    if (!content) throw new Error("Course not found")
+
+    const prompt = await readFile(`../prompt/quiz_generator.txt`, "utf8")
+    const { object } = await generateObject({
+      model,
+      schema: z.array(
+        z.object({
+          question_type: z
+            .enum(["multiple_choice", "open_ended"])
+            .describe(
+              "The type of question to generate, must be either 'multiple_choice' or 'open_ended'"
+            ),
+          question: z.string(),
+          choices: z.array(z.string()).optional(),
+          answer: z.string(),
+        })
+      ),
+      mode: "json",
+      prompt: prompt
+        .replaceAll("{question_type}", "exam")
+        .replaceAll("{topic}", "all")
+        .replaceAll("{difficulty}", "intermediate-advanced")
+        .replaceAll("{objective}", "unsderstanding and application")
+        .replaceAll("{content}", content.content)
+        .replaceAll("{total_questions}", "10")
+        .replaceAll("{context}", ""),
+    })
+
+    console.log(object)
+
+    return object as SectionQuiz[]
+  },
+  undefined,
+  {
+    revalidate: 60 * 60,
+    tags: ["course-exam"],
   }
 )
 
