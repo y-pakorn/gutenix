@@ -84,8 +84,13 @@ export default async function Home({
             <Link
               href={`/course/${course.id}`}
               key={course.id}
-              className="flex cursor-pointer items-center gap-4 transition-transform duration-300 hover:scale-[1.02]"
+              className="relative flex cursor-pointer items-center gap-4 transition-transform duration-300 hover:scale-[1.02]"
             >
+              {course.exam && (
+                <Badge className="absolute right-1 top-1">
+                  Certificate Available
+                </Badge>
+              )}
               <img
                 src={course.cover_image}
                 alt={course.title}

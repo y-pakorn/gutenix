@@ -60,7 +60,7 @@ function CertCard({ certificate }: { certificate: Certificate }) {
       </p>
 
       <div className="flex-1" />
-      <Link href={`/course/${certificate.certificateId}`}>
+      <Link href={`/course/${id}`}>
         <Button variant="outline" size="sm" className="mt-2 w-full">
           Go To Course
         </Button>
