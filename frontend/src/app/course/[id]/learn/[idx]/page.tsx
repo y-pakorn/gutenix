@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils"
 import { generateCourseSectionQuiz, gradeQuiz } from "@/services/ai"
 import { getCourseContentBySectionIndex } from "@/services/course"
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 import { Markdown } from "@/components/markdown"
 
@@ -103,23 +105,26 @@ function Quiz({
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [grade, setGrade] = useState<OpenEndedQuizGrading | null>(null)
 
+  console.log(question)
+
   return (
     <div className="flex flex-col gap-4 rounded-md border p-4">
-      <h1 className="text-xl font-bold">Quiz #{index}</h1>
+      <h1 className="text-xl font-bold">Quiz #{index + 1}</h1>
       <h2>{question.question}</h2>
       {question.question_type === "multiple_choice" ? (
-        <div className="grid grid-cols-2 gap-2">
+        <RadioGroup
+          className="grid grid-cols-2 gap-2"
+          value={answer || undefined}
+          onValueChange={setAnswer}
+        >
           {question.choices?.map((choice, i) => (
-            <Button
-              key={i}
-              className="h-fit min-h-10 whitespace-pre-wrap rounded-md"
-              onClick={() => {
-                setAnswer((prev) => (prev === choice ? null : choice))
-              }}
-              variant={answer === choice ? "secondary" : "outline"}
-              disabled={isSubmitted}
-            >
-              {choice}{" "}
+            <div key={i} className="flex items-center gap-2">
+              <RadioGroupItem
+                value={choice}
+                id={choice}
+                disabled={isSubmitted}
+              />
+              <Label htmlFor={choice}>{choice}</Label>
               {answer === choice &&
                 isSubmitted &&
                 answer === question.answer && (
@@ -130,9 +135,9 @@ function Quiz({
                 answer !== question.answer && (
                   <X className="ml-2 size-4 shrink-0 rounded-full bg-red-500 p-1" />
                 )}
-            </Button>
+            </div>
           ))}
-        </div>
+        </RadioGroup>
       ) : (
         <Textarea
           value={answer || ""}
@@ -151,6 +156,18 @@ function Quiz({
         >
           <div className="text-xl font-bold">{_.startCase(grade.result)}!</div>
           <div>{grade.feedback}</div>
+        </div>
+      )}
+      {question.question_type === "multiple_choice" && isSubmitted && (
+        <div
+          className={cn(
+            question.answer === answer ? "text-green-400" : "text-red-400"
+          )}
+        >
+          <div className="text-xl font-bold">
+            {question.answer === answer ? "Correct" : "Wrong"}!
+          </div>
+          {question.answer !== answer && <div>{question.hint}</div>}
         </div>
       )}
       <div className="flex w-full justify-end gap-2">

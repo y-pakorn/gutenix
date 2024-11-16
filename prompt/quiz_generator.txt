@@ -11,6 +11,7 @@ the question should be object follow with the following fields:
 - question: question text
 - choices: list of choices (optional) if question_type is multiple_choice. otherwise, remove this line, not required for open_ended
 - answer: correct answer
+- hint: hint for helping the user to answer the question, will be shown if user click "hint" button or answer incorrectly
 
 generate total of {total_questions} questions, try to mix in different question types
 

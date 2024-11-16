@@ -3,6 +3,7 @@ export type SectionQuiz = {
   question: string
   choices?: string[]
   answer: string
+  hint: string
 }
 
 export type OpenEndedQuizGrading = {

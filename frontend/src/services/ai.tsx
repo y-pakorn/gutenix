@@ -38,6 +38,9 @@ export const generateCourseSectionQuiz = unstable_cache(
           question: z.string(),
           choices: z.array(z.string()).optional(),
           answer: z.string(),
+          hint: z
+            .string()
+            .describe('Answer hint, only shown when user click "hint" button'),
         })
       ),
       mode: "json",
@@ -82,6 +85,9 @@ export const generateExamQuiz = unstable_cache(
           question: z.string(),
           choices: z.array(z.string()).optional(),
           answer: z.string(),
+          hint: z
+            .string()
+            .describe('Answer hint, only shown when user click "hint" button'),
         })
       ),
       mode: "json",

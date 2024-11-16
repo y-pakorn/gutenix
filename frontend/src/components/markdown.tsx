@@ -54,7 +54,7 @@ export function Markdown({
       remarkPlugins={[remarkGfm, remarkMath]}
       rehypePlugins={[rehypeKatex]}
       className={cn(
-        "prose dark:prose-invert prose-headings:text-primary min-w-full whitespace-normal text-primary",
+        "prose dark:prose-invert prose-headings:text-primary prose-h2:text-4xl prose-h3:text-2xl prose-p:text-base min-w-full whitespace-normal text-primary",
         className
       )}
       components={MDX_COMPONENTS}
