@@ -38,7 +38,9 @@ const MDX_COMPONENTS: Partial<Components> = {
   tbody: (props) => <TableBody {...props} />,
   tfoot: (props) => <TableFooter {...props} />,
   caption: (props) => (
-    <TableCaption className={props.className} children={props.children} />
+    <TableCaption className={props.className} style={props.style}>
+      {props.children}
+    </TableCaption>
   ),
 } as const
 
